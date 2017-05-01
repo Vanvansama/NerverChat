@@ -1,2 +1,1 @@
-include ':app', ':MDLayout'
-project(':MDLayout').projectDir = new File('MDlibrary')
+include ':app'
