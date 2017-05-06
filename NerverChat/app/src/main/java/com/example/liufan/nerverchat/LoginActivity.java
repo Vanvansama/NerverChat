@@ -1,6 +1,7 @@
 package com.example.liufan.nerverchat;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("NeverChat");
         toolbar.setSubtitle("  Login now");
@@ -165,6 +167,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         animator.setDuration(500).start();
         ToastUtil.showInfo(LoginActivity.this, "登录成功");
         //启动新界面
+        Intent intent = new Intent(LoginActivity.this,mini_drawer.class);
+        startActivity(intent);
     }
     private void unLogin(){
         ToastUtil.showInfo(LoginActivity.this, "用户名或密码错误");
