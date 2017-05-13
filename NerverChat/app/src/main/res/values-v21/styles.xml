@@ -5,11 +5,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
-        <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
+    <style name="Mini_drawer" parent="MaterialDrawerTheme.TranslucentStatus">
+        <!--状态栏颜色-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--底部导航栏颜色-->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!--Appbar背景色-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--ToolBar上的Title颜色-->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!--各个控制控件的默认颜色-->
+        <item name="colorControlNormal">@android:color/white</item>
+
+    </style>
+
     <declare-styleable name="RippleView">
         <attr name="pressed" format="reference"/>
         <attr name="normal" format="reference"/>

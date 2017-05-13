@@ -1,7 +1,10 @@
 package com.example.liufan.nerverchat;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,6 +32,7 @@ import com.example.liufan.nerverchat.my.SwipeDismissRecyclerViewTouchListener;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -36,6 +45,7 @@ import com.mikepenz.materialdrawer.model.ExpandableBadgeDrawerItem;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryToggleDrawerItem;
@@ -51,6 +61,9 @@ import java.util.List;
 
 
 public class mini_drawer extends AppCompatActivity {
+
+    //user
+    user user;
     //FrameLayout
     private FrameLayout layout;
 
@@ -58,10 +71,14 @@ public class mini_drawer extends AppCompatActivity {
     private AccountHeader headerResult = null;
     private Drawer result = null;
     private CrossfadeDrawerLayout crossfadeDrawerLayout = null;
+    IProfile profile;
+    IProfile profile2;
+    IProfile profile3;
 
-    IProfile profile = new ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon("https://avatars3.githubusercontent.com/u/1476232?v=3&s=460");
-    IProfile profile2 = new ProfileDrawerItem().withName("Bernat Borras").withEmail("alorma@github.com").withIcon(Uri.parse("https://avatars3.githubusercontent.com/u/887462?v=3&s=460"));
+    //chat list
+    List<Chat> chats;
 
+    //recycler
     private RecyclerView mChatRecyclerView;
     private ChatAdapter mAdapter;
     //recycler adapter
@@ -79,6 +96,9 @@ public class mini_drawer extends AppCompatActivity {
         }
         public void bindChat(Chat chat){
             mChat = chat;
+            if(mChat.getImageID() != 0){
+                mImageView.setImageResource(mChat.getImageID());
+            }
             mTitleTextView.setText(mChat.getName().toString());
             mSummaryView.setText("-"+mChat.getName().toString()+"-");
         }
@@ -110,7 +130,24 @@ public class mini_drawer extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //设置顶部状态栏颜色
+            window.setStatusBarColor(Color.TRANSPARENT);
+            //设置底部导航栏颜色(有的手机没有)
+            window.setNavigationBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_mini_toolbar);
+
+        //get intent
+        Intent intent = getIntent();
+        user = (user) intent.getSerializableExtra("user");
 
         //recycler view
         mChatRecyclerView = (RecyclerView) findViewById(R.id.chat_recycler_view);
@@ -119,7 +156,7 @@ public class mini_drawer extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL_LIST));
         updateUI();
 
-        //recycler listen
+        //recyclerView listener
         SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
                 mChatRecyclerView,
                 new SwipeDismissRecyclerViewTouchListener.DismissCallbacks(){
@@ -130,7 +167,15 @@ public class mini_drawer extends AppCompatActivity {
                     @Override
                     public void onDismiss(View view){
                         //Do what you want when dismiss
-
+                        ChatHolder viewHolder = (ChatHolder) mChatRecyclerView.getChildViewHolder(view);
+                        layout = (FrameLayout) findViewById(R.id.frame_container) ;
+                        Snackbar.make(layout,viewHolder.mChat.getName()+" touch!",Snackbar.LENGTH_LONG)
+                                .setAction("Undo", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        // Perform anything for the action selected
+                                    }
+                                }).show();
                     }
                 })
                 .setIsVertical(false)
@@ -146,23 +191,19 @@ public class mini_drawer extends AppCompatActivity {
                             @Override
                             public void onClick(int position) {
                                 //Do what you want when item be click
-                                View view = mChatRecyclerView.getChildAt(position);
-                                ChatHolder viewHolder = (ChatHolder) mChatRecyclerView.getChildViewHolder(view);
-                                layout = (FrameLayout) findViewById(R.id.frame_container) ;
-                                Snackbar.make(layout,viewHolder.mChat.getName()+" click!",Snackbar.LENGTH_LONG)
-                                        .setAction("Undo", new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                // Perform anything for the action selected
-                                            }
-                                        }).show();
+                                Intent intent = new Intent(mini_drawer.this,ChatLayout.class);
+                                Bundle data = new Bundle();
+                                data.putSerializable("user",user);
+                                data.putSerializable("chat",chats.get(position));
+                                intent.putExtras(data);
+                                startActivity(intent);
                             }
                         })
                 .create();
         mChatRecyclerView.setOnTouchListener(listener);
 
 
-        //handle toolbar
+        //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -172,8 +213,35 @@ public class mini_drawer extends AppCompatActivity {
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
                 .addProfiles(
-                        profile,profile2
+                        profile = new ProfileDrawerItem().withName(user.getUsername().toString()).withEmail("*********@qq.com").withIcon(R.drawable.user)
+                        //new ProfileSettingDrawerItem().withName("Add Friend").withDescription("Add new Friend").withIcon(GoogleMaterial.Icon.gmd_plus).withIdentifier(100001),
+                        //new ProfileSettingDrawerItem().withName("Manage Account").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100002)
                 )
+                .withSelectionListEnabled(false)
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        if(profile instanceof IDrawerItem){
+                            Toast.makeText(mini_drawer.this, "1234", Toast.LENGTH_SHORT).show();
+                        }
+                        /*
+                        //sample usage of the onProfileChanged listener
+                        //if the clicked item has the identifier 1 add a new profile ;)
+                        if (profile instanceof IDrawerItem && profile.getIdentifier() == 100001) {
+                            int count = 100 + headerResult.getProfiles().size() + 1;
+                            IProfile newProfile = new ProfileDrawerItem().withNameShown(true).withName("new" + count).withEmail("new" + count + "@gmail.com").withIcon(R.drawable.profile5).withIdentifier(count);
+                            if (headerResult.getProfiles() != null) {
+                                //we know that there are 2 setting elements. set the new profile above them ;)
+                                headerResult.addProfile(newProfile, headerResult.getProfiles().size() - 2);
+                            } else {
+                                headerResult.addProfiles(newProfile);
+                            }
+                        }
+                        //false if you have not consumed the event and it should close the drawer
+                        */
+                        return false;
+                    }
+                })
                 .withSavedInstance(savedInstanceState)
                 .build();
 
@@ -187,14 +255,18 @@ public class mini_drawer extends AppCompatActivity {
                 .withGenerateMiniDrawer(true)
                 .withAccountHeader(headerResult)//set the AccountHeader we created earlier for the header
                 .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Message")
+                                .withIcon(FontAwesome.Icon.faw_home)
+                                .withBadge("3")
+                                .withBadgeStyle(new BadgeStyle(Color.RED, Color.RED))
+                                .withIdentifier(1),
                         new PrimaryDrawerItem().withName("Item 1")
-                                .withIcon(GoogleMaterial.Icon.gmd_sun).withIdentifier(1),
-                        new PrimaryDrawerItem().withName("Item 2")
-                                .withIcon(FontAwesome.Icon.faw_home).withBadge("22")
-                                .withBadgeStyle(new BadgeStyle(Color.RED, Color.RED)).withIdentifier(2).withSelectable(false),
+                                .withIcon(GoogleMaterial.Icon.gmd_sun)
+                                .withIdentifier(2),
                         new PrimaryDrawerItem()
                                 .withName("Item 3")
-                                .withIcon(FontAwesome.Icon.faw_gamepad).withIdentifier(3),
+                                .withIcon(FontAwesome.Icon.faw_gamepad)
+                                .withIdentifier(3),
                         new PrimaryDrawerItem()
                                 .withName("Item 4")
                                 .withIcon(FontAwesome.Icon.faw_eye)
@@ -204,7 +276,7 @@ public class mini_drawer extends AppCompatActivity {
                                 .withName("Item 5")
                                 .withIcon(GoogleMaterial.Icon.gmd_adb)
                                 .withIdentifier(5),
-                        new SectionDrawerItem().withName("Section Header"),
+                        new SectionDrawerItem().withName("Settings option"),
                         new ExpandableBadgeDrawerItem()
                                 .withName("Collapsable Badge")
                                 .withIcon(GoogleMaterial.Icon.gmd_collection_case_play)
@@ -320,11 +392,30 @@ public class mini_drawer extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.mini_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+
+
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
     private void updateUI(){
         ChatLab chatLab = ChatLab.get(mini_drawer.this);
-        List<Chat> chats = chatLab.getChats();
+        chats = chatLab.getChats();
 
         mAdapter = new ChatAdapter(chats);
         mChatRecyclerView.setAdapter(mAdapter);

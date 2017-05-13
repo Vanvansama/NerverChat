@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/MDlibrary/MDLayout.iml" filepath="$PROJECT_DIR$/MDlibrary/MDLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/NerverChat.iml" filepath="$PROJECT_DIR$/NerverChat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/parallaxbacklayout/parallaxbacklayout.iml" filepath="$PROJECT_DIR$/parallaxbacklayout/parallaxbacklayout.iml" />
     </modules>
   </component>
 </project>

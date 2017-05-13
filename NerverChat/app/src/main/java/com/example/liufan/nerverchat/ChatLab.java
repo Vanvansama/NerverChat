@@ -2,6 +2,8 @@ package com.example.liufan.nerverchat;
 
 import android.content.Context;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +23,14 @@ public class ChatLab {
     }
     private ChatLab(Context context){
         mChats = new ArrayList<>();
+        Chat chat = new Chat();
+        chat.setName("Yuki");
+        chat.setImageID(R.drawable.yuki);
+        mChats.add(chat);
         for (int i = 0; i < 20; i++){
-            Chat chat = new Chat();
-            chat.setName("item "+i);
-            mChats.add(chat);
+            Chat c = new Chat();
+            c.setName("item "+i);
+            mChats.add(c);
         }
     }
     public List<Chat> getChats(){

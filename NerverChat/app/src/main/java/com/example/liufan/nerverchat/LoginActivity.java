@@ -2,6 +2,8 @@ package com.example.liufan.nerverchat;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,12 +38,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private int translateY;
     private Handler handler;
     private LoginThread loginThread;
+    private user user = new user();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
+
 
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("NeverChat");
@@ -143,7 +150,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     stereoView.setItem(1);
                     return;
                 }
+                //测试用
                 loginLis();
+                isLogin();
                 break;
         }
     }
@@ -167,8 +176,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         animator.setDuration(500).start();
         ToastUtil.showInfo(LoginActivity.this, "登录成功");
         //启动新界面
+        user.setUsername(etUsername.getText().toString());
+        user.setPassword(etPassword.getText().toString());
         Intent intent = new Intent(LoginActivity.this,mini_drawer.class);
+        Bundle data = new Bundle();
+        data.putSerializable("user",user);
+        intent.putExtras(data);
         startActivity(intent);
+        LoginActivity.this.finish();
     }
     private void unLogin(){
         ToastUtil.showInfo(LoginActivity.this, "用户名或密码错误");

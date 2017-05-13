@@ -1,2 +1,3 @@
-include ':app', ':MDLayout'
+include ':app', ':MDLayout', ':parallaxbacklayout'
 project(':MDLayout').projectDir = new File('MDlibrary')
+project(':parallaxbacklayout').projectDir = new File('parallaxbacklayout')

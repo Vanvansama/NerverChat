@@ -26,7 +26,7 @@ public class LoginThread implements Runnable {
     }
     public void run(){
         try{
-            socket=new Socket("119.29.248.175",9400);
+            socket=new Socket("119.29.117.108",9400);
             br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
             os=socket.getOutputStream();
             new Thread(){

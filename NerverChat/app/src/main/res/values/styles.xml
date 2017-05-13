@@ -16,6 +16,22 @@
     <style name="Mini_drawer" parent="MaterialDrawerTheme.TranslucentStatus">
 
     </style>
+    <style name="ChatLayoutTheme" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/Animation_Right</item>
+    </style>
+    <style name="toolbarButtonColor">
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+
+
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="border_overlay" format="boolean" />
+    </declare-styleable>
     <declare-styleable name="RippleView">
         <attr name="pressed" format="reference"/>
         <attr name="normal" format="reference"/>
