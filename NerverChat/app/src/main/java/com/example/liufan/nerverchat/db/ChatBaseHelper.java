@@ -24,7 +24,8 @@ public class ChatBaseHelper extends SQLiteOpenHelper {
                 ChatTable.Cols.USER + ", " +
                 ChatTable.Cols.TONAME + ", " +
                 ChatTable.Cols.CONTENT + ", " +
-                ChatTable.Cols.ICON +
+                ChatTable.Cols.ICON + ", " +
+                ChatTable.Cols.TIME +
                 ")"
         );
     }

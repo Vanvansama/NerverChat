@@ -13,6 +13,7 @@ public class ChatDBSchema {
             public static final String TONAME = "name";
             public static final String CONTENT = "content";
             public static final String ICON = "icon";
+            public static final String TIME = "time";
         }
     }
 

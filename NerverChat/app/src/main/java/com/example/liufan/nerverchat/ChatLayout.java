@@ -32,9 +32,10 @@ import com.example.liufan.nerverchat.db.ChatMessageCursorWrapper;
 import com.github.anzewei.parallaxbacklayout.ParallaxActivityBase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
-
+import static com.example.liufan.nerverchat.db.ChatDBSchema.*;
 
 
 public class ChatLayout extends ParallaxActivityBase {
@@ -184,20 +185,22 @@ public class ChatLayout extends ParallaxActivityBase {
     }
 
     private static ContentValues getContentValues(ChatModel model){
+        long time;
         ContentValues values = new ContentValues();
-        values.put(ChatDBSchema.ChatTable.Cols.USER ,model.getUser().toString());
-        values.put(ChatDBSchema.ChatTable.Cols.TONAME ,model.getName().toString());
-        values.put(ChatDBSchema.ChatTable.Cols.CONTENT ,model.getContent().toString());
-        values.put(ChatDBSchema.ChatTable.Cols.ICON ,model.getIcon());
+        values.put(ChatTable.Cols.USER ,model.getUser().toString());
+        values.put(ChatTable.Cols.TONAME ,model.getName().toString());
+        values.put(ChatTable.Cols.CONTENT ,model.getContent().toString());
+        values.put(ChatTable.Cols.ICON ,model.getIcon());
+        values.put(ChatTable.Cols.TIME, time=System.currentTimeMillis());
         return values;
     }//键值对
     public void addChatMessage(ChatModel model){
         ContentValues values = getContentValues(model);
-        database.insert(ChatDBSchema.ChatTable.NAME ,null ,values);
+        database.insert(ChatTable.NAME ,null ,values);
     }//写入数据库
     private ChatMessageCursorWrapper queryChatMessage(String whereClause, String[] whereArgs){
         Cursor cursor = database.query(
-                ChatDBSchema.ChatTable.NAME,
+                ChatTable.NAME,
                 null,
                 whereClause,
                 whereArgs,

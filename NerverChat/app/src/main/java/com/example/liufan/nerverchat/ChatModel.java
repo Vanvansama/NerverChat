@@ -1,6 +1,7 @@
 package com.example.liufan.nerverchat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 public class ChatModel implements Serializable{
@@ -9,6 +10,7 @@ public class ChatModel implements Serializable{
     private int icon;
     private String content="";
     private String type="";
+    private long date;
 
     public int getIcon() {
         return icon;
@@ -48,5 +50,13 @@ public class ChatModel implements Serializable{
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public long getDate() {
+        return date;
+    }
+
+    public void setDate(long date) {
+        this.date = date;
     }
 }

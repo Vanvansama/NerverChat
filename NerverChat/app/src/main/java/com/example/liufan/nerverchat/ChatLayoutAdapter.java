@@ -73,6 +73,7 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
     private class ChatFromViewHolder extends BaseAdapter{
         private ImageView ic_user;
         private TextView tv_Message;
+        private long time = System.currentTimeMillis();
 
         public ChatFromViewHolder(View view){
             super(view);
@@ -85,12 +86,16 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
             super.setData(object);
             ChatModel model = (ChatModel) object;
             ic_user.setImageResource(model.getIcon());
-            tv_Message.setText(model.getContent());        }
+            if((time - model.getDate()) <= 5000){
+                tv_Message.setText(model.getContent());
+            }else
+                tv_Message.setText("/*该消息已销毁*/");       }
     }
 
     private class ChatToViewHolder extends BaseAdapter {
         private ImageView ic_user;
         private TextView tv_Message;
+        private long time;
 
         public ChatToViewHolder(View view) {
             super(view);
@@ -105,6 +110,8 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
             ChatModel model = (ChatModel) object;
             ic_user.setImageResource(model.getIcon());
             tv_Message.setText(model.getContent());
+
+
         }
     }
 }

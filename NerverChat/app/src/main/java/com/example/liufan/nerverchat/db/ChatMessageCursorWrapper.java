@@ -20,12 +20,14 @@ public class ChatMessageCursorWrapper extends CursorWrapper {
         String name = getString(getColumnIndex(ChatTable.Cols.TONAME ));
         String content = getString(getColumnIndex(ChatTable.Cols.CONTENT ));
         int icon = getInt(getColumnIndex(ChatTable.Cols.ICON));
+        long time = getLong(getColumnIndex(ChatTable.Cols.TIME));
 
         ChatModel model = new ChatModel();
         model.setUser(user);
         model.setName(name);
         model.setContent(content);
         model.setIcon(icon);
+        model.setDate(time);
 
         return model;
     }
