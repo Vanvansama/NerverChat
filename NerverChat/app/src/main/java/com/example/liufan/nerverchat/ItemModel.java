@@ -2,13 +2,11 @@ package com.example.liufan.nerverchat;
 
 import java.io.Serializable;
 
-/**
- * Created by WangChang on 2016/4/28.
- */
+
 public class ItemModel implements Serializable {
 
-    public static final int CHAT_A = 1001;
-    public static final int CHAT_B = 1002;
+    public static final int CHAT_From = 1001;
+    public static final int CHAT_To = 1002;
     public int type;
     public Object object;
 

@@ -152,7 +152,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 //测试用
                 loginLis();
-                isLogin();
                 break;
         }
     }

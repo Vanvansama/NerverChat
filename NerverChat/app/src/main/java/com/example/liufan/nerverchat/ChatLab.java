@@ -15,17 +15,22 @@ public class ChatLab {
     private static ChatLab sChatLab;
 
     private List<Chat> mChats;
-    public static ChatLab get(Context context){
+    public static ChatLab get(user user){
         if (sChatLab == null){
-            sChatLab = new ChatLab(context);
+            sChatLab = new ChatLab(user);
         }
         return sChatLab;
     }
-    private ChatLab(Context context){
+    private ChatLab(user user){
         mChats = new ArrayList<>();
         Chat chat = new Chat();
-        chat.setName("Yuki");
-        chat.setImageID(R.drawable.yuki);
+        if(user.getUsername().equals("yuki")) {
+            chat.setName("Root");
+            chat.setImageID(R.drawable.user);
+        }else if(user.getUsername().equals("root")){
+            chat.setName("Yuki");
+            chat.setImageID(R.drawable.yuki);
+        }
         mChats.add(chat);
         for (int i = 0; i < 20; i++){
             Chat c = new Chat();

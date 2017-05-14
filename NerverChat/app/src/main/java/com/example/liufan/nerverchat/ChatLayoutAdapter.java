@@ -37,9 +37,9 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
     @Override
     public ChatLayoutAdapter.BaseAdapter onCreateViewHolder(ViewGroup parent,int viewType){
         switch(viewType){
-            case ItemModel.CHAT_A:
+            case ItemModel.CHAT_From:
                 return new ChatFromViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_from, parent, false));
-            case ItemModel.CHAT_B:
+            case ItemModel.CHAT_To:
                 return new ChatToViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_to, parent, false));
         }
         return null;
@@ -84,7 +84,7 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
         void setData(Object object){
             super.setData(object);
             ChatModel model = (ChatModel) object;
-            Picasso.with(itemView.getContext()).load(model.getIcon()).placeholder(R.mipmap.ic_launcher).into(ic_user);
+            ic_user.setImageResource(model.getIcon());
             tv_Message.setText(model.getContent());        }
     }
 
@@ -103,7 +103,7 @@ public class ChatLayoutAdapter extends RecyclerView.Adapter<ChatLayoutAdapter.Ba
         void setData(Object object) {
             super.setData(object);
             ChatModel model = (ChatModel) object;
-            Picasso.with(itemView.getContext()).load(model.getIcon()).placeholder(R.mipmap.ic_launcher).into(ic_user);
+            ic_user.setImageResource(model.getIcon());
             tv_Message.setText(model.getContent());
         }
     }

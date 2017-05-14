@@ -74,6 +74,7 @@ public class mini_drawer extends AppCompatActivity {
     IProfile profile;
     IProfile profile2;
     IProfile profile3;
+    int MainImage;
 
     //chat list
     List<Chat> chats;
@@ -148,6 +149,11 @@ public class mini_drawer extends AppCompatActivity {
         //get intent
         Intent intent = getIntent();
         user = (user) intent.getSerializableExtra("user");
+        if(user.getUsername().equals("root")){
+            MainImage=R.drawable.user;
+        }else if(user.getUsername().equals("yuki")){
+            MainImage=R.drawable.yuki;
+        }
 
         //recycler view
         mChatRecyclerView = (RecyclerView) findViewById(R.id.chat_recycler_view);
@@ -213,7 +219,7 @@ public class mini_drawer extends AppCompatActivity {
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
                 .addProfiles(
-                        profile = new ProfileDrawerItem().withName(user.getUsername().toString()).withEmail("*********@qq.com").withIcon(R.drawable.user)
+                        profile = new ProfileDrawerItem().withName(user.getUsername().toString()).withEmail("*********@qq.com").withIcon(MainImage)
                         //new ProfileSettingDrawerItem().withName("Add Friend").withDescription("Add new Friend").withIcon(GoogleMaterial.Icon.gmd_plus).withIdentifier(100001),
                         //new ProfileSettingDrawerItem().withName("Manage Account").withIcon(GoogleMaterial.Icon.gmd_settings).withIdentifier(100002)
                 )
@@ -414,7 +420,7 @@ public class mini_drawer extends AppCompatActivity {
 
 
     private void updateUI(){
-        ChatLab chatLab = ChatLab.get(mini_drawer.this);
+        ChatLab chatLab = ChatLab.get(user);
         chats = chatLab.getChats();
 
         mAdapter = new ChatAdapter(chats);
